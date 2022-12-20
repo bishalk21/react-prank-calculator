@@ -1,9 +1,10 @@
 import React from "react";
 
-export const DisplayComp = ({ str }) => {
+export const DisplayComp = ({ str, prank }) => {
+  const className = prank ? "display prank" : "display";
   return (
     <>
-      <div className="display">{str || "0.00"}</div>
+      <div className={className}>{str || "0.00"}</div>
     </>
   );
 };

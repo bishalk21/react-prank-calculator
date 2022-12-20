@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import { ButtonArea } from "./components/buttonArea";
 import { DisplayComp } from "./components/displayComp.js";
+import a from "./assets/a.wav";
 
 // operators are readable variables so we can use them in the code
 const operators = ["+", "-", "*", "/"];
@@ -20,9 +21,13 @@ function App() {
   const [str, setStr] = useState("");
   const [lastOperator, setLastOperator] = useState("");
 
-  // for operators
+  // to make prank value of the button on the display component from the button component
+  const [prank, setPrank] = useState(false); // setting the initial value of the prank to false because we don't want to display the prank value on page load
+  const [audio] = useState(new Audio(a));
 
   const handleOnClick = (val) => {
+    prank && setPrank(false); // false because we don't want to display the prank value on page load
+
     // what we should do when the button is clicked
 
     // 1. if the value of the button is AC then we need to clear the display
@@ -82,8 +87,25 @@ function App() {
 
   // 2. total function to calculate the total
   const onTotal = () => {
-    const total = eval(str);
+    const prankValue = randomNumber();
+    prankValue > 0 && audio.play() && setPrank(true);
+    const total = eval(str) + prankValue;
     setStr(total.toFixed(2).toString());
+    // toFixed(2) is used to round the number to 2 decimal places
+    // toString() is used to convert the number to string
+  };
+
+  // 3. prank function to make prank value of the button on the display component from the button component
+  const randomNumber = () => {
+    // 1. to make prank value of the button on the display component from the button component
+    // 2. we need to create a state variable in the main component and pass it as props to the button component
+    // 3. we need to create a function in the main component
+    // 4. we need to call the function in the button component on click of the button
+
+    // math.ceil rounds the number up to the nearest integer (1.1 -> 2)
+    // math.random generates a random number between 0 and 1
+    const num = Math.ceil(Math.random() * 10);
+    return num > 3 ? 0 : num;
   };
 
   return (
@@ -93,11 +115,11 @@ function App() {
         <div className="container-fluid">
           {/* <!-- CALCULATORS --> */}
           <div className="simple-calculator">
-            <h2 className="title">Simple Calculator App</h2>
+            <h2 className="title">React Prank Calculator</h2>
 
             <div className="container">
               {/* DISPLAY COMPONENT */}
-              <DisplayComp str={str} />
+              <DisplayComp str={str} prank={prank} />
 
               {/* BUTTON AREA */}
               <ButtonArea handleOnClick={handleOnClick} />
